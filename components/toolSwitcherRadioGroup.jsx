@@ -49,7 +49,7 @@ const ToolSwitcherRadioGroup = ({ defaultValue }) => {
       {tempTool === "option-two" && (
         <Input
           type="text"
-          placeholder="https://github.com/MarcelGallois/langchainjs-chatbot"
+          placeholder="https://github.com/MarcelGallois/langchainjs-chat"
           value={tempGithubRepo}
           onChange={handleRepoChange}
           className="my-2"
