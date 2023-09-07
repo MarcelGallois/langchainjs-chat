@@ -33,7 +33,7 @@ export default function Home() {
 
   useEffect(() => {
     setChatHistory([]);
-  }, [selectedTool]);
+  }, [selectedTool, githubRepo]);
 
 
   const handleQuestion = async (input = userInput) => {
