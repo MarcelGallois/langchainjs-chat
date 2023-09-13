@@ -13,12 +13,25 @@ export const useToolSwitcher = () => {
 };
 
 export const ToolSwitcherProvider = ({ children }) => {
-  const [selectedTool, setSelectedTool] = useState(null);
-  const [githubRepo, setGithubRepo] = useState('');
+  const [toolState, setToolState] = useState({
+    selectedTool: null,
+    selectedToolName: null,
+    selectedModel: null,
+    selectedModelName: null,
+    selectedPersonality: null,
+    selectedPersonalityName: null,
+    selectedTemperature: null,
+    githubRepo: ''
+  });
+
+  const updateToolState = (key, value) => {
+    setToolState(prevState => ({ ...prevState, [key]: value }));
+  };
 
   return (
-    <ToolSwitcherContext.Provider value={{ selectedTool, setSelectedTool, githubRepo, setGithubRepo }}>
+    <ToolSwitcherContext.Provider value={{ ...toolState, updateToolState }}>
       {children}
     </ToolSwitcherContext.Provider>
   );
 };
+

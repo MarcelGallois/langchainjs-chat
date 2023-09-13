@@ -15,13 +15,13 @@ import axios from 'axios';  // or use any other method to make API calls
 const DynamicSuggestionCards = ({ handleQuestion }) => {
   const cardInfo = [
     {
-      title: "How was this built?",
-      description: 'Learn more about how this application was built.',
+      title: "What is in this GitHub repo?",
+      description: 'Learn about this GitHub repo.',
       hideOnSmall: true  // This will hide the first card on small screens
     },
     {
-      title: 'Who is M?',
-      description: 'Learn more about the creator of this application.',
+      title: 'Tell me how to use langchainjs.',
+      description: 'Learn how to use langchainjs.',
       hideOnSmall: false  // This will show the second card on small screens
     }
   ];

@@ -1,5 +1,4 @@
-// pages/api/askQuestion.js
-
+// pages/api/events.js
 import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
@@ -9,58 +8,52 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import { BufferMemory } from "langchain/memory";
 import { GithubRepoLoader } from "langchain/document_loaders/web/github";
 
-export default async (req, res) => {
-  if (req.method !== "POST") {
+export default async function handler(req, res) {
+  if (req.method !== "GET") {
     return res.status(405).end();
   }
 
-  const { repo } = req.body;
-
-  if (!repo) {
-    return res.status(400).json({ error: "Missing GitHub repository" });
-  }
-
-  console.log(repo)
+  // SSE Setup
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache, no-transform');
+  res.setHeader('Connection', 'keep-alive');
 
   // Initialize logic
   const loader = new GithubRepoLoader(
-    repo,
+    "https://github.com/hwchase17/langchainjs",
     {
       branch: "main",
       recursive: false,
-      processSubmodules: true,
       unknown: "warn",
-      maxConcurrency: 5, // Defaults to 2
-      accessToken: process.env.GITHUB_ACCESS_TOKEN
+      maxConcurrency: 5,
     }
   );
   const data = await loader.load();
-  // console.log(data)
-
   const textSplitter = new RecursiveCharacterTextSplitter({
     chunkSize: 500,
     chunkOverlap: 0,
   });
   const splitDocs = await textSplitter.splitDocuments(data);
 
-
   const embeddings = new OpenAIEmbeddings();
   const vectorStore = await MemoryVectorStore.fromDocuments(splitDocs, embeddings);
-  console.log(splitDocs)
 
-  const memory = new BufferMemory({
-    memoryKey: "chat_history",
-    returnMessages: true,
+  const sendData = (data) => {
+    res.write(`data: ${JSON.stringify(data)}\n\n`);
+  }
+
+  const model = new ChatOpenAI({
+    modelName: "gpt-3.5-turbo",
+    streaming: true,
+    callbackManager: {
+      handleNewToken(token) {
+        sendData({ token });
+      },
+    },
   });
 
-  const model = new ChatOpenAI({ modelName: "gpt-3.5-turbo-16k" });
-  const chain = ConversationalRetrievalQAChain.fromLLM(model, vectorStore.asRetriever(), {
-    memory
+  req.on('close', () => {
+    sendData("[DONE]")
+    res.end();
   });
-
-  // Call the chain
-  const result = await chain.call({ question: req.body.question });
-
-  // Respond with result
-  res.status(200).json({ result });
 };

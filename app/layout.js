@@ -1,6 +1,8 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import { ToolSwitcherProvider } from './context/toolSwitcherContext';
+import "prismjs/themes/prism-dark.css";
+import { ThemeProvider } from "@/components/themeProvider"
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -11,10 +13,16 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ToolSwitcherProvider>
-      <html lang="en">
-        <body className={inter.className}>{children}</body>
-      </html>
-    </ToolSwitcherProvider>
+
+    <html lang="en">
+      <body className={inter.className}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ToolSwitcherProvider>
+            {children}
+          </ToolSwitcherProvider>
+        </ThemeProvider>
+      </body>
+    </html>
+
   )
 }

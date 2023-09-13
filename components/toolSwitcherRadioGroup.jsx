@@ -5,14 +5,16 @@ import { useToolSwitcher } from "@/app/context/toolSwitcherContext";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
-const ToolSwitcherRadioGroup = ({ defaultValue }) => {
-  const { selectedTool, setSelectedTool, githubRepo, setGithubRepo } = useToolSwitcher();
+export default function ToolSwitcherRadioGroup({ defaultValue }) {
+  const { selectedTool, selectedToolName, githubRepo, updateToolState } = useToolSwitcher();
   const [tempTool, setTempTool] = useState(selectedTool);
   const [tempGithubRepo, setTempGithubRepo] = useState(githubRepo);
   const [isChanged, setIsChanged] = useState(false);
 
+
   const handleToolSwitch = (value) => {
     setTempTool(value);
+    console.log(tempTool)
     setIsChanged(value !== selectedTool || tempGithubRepo !== githubRepo);
   };
 
@@ -22,10 +24,19 @@ const ToolSwitcherRadioGroup = ({ defaultValue }) => {
   };
 
   const saveChanges = () => {
-    setSelectedTool(tempTool);
-    setGithubRepo(tempGithubRepo);
+    const toolNames = {
+      "option-one": "Default - No Tools",
+      "option-two": "GitHub Tool",
+      "option-three": "Web Tool",
+    };
+    updateToolState("selectedTool", tempTool);
+    updateToolState("selectedToolName", toolNames[tempTool]);
+    if (tempTool !== "option-two") {
+      updateToolState("githubRepo", "");
+    } else {
+      updateToolState("githubRepo", tempGithubRepo);
+    }
     setIsChanged(false);
-
   };
 
   useEffect(() => {
@@ -38,12 +49,16 @@ const ToolSwitcherRadioGroup = ({ defaultValue }) => {
     <>
       <RadioGroup defaultValue={selectedTool} onValueChange={handleToolSwitch}>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="option-one" id="option-one" />
+          <RadioGroupItem value="option-one" id="Default Tool" />
           <Label htmlFor="option-one">Default</Label>
         </div>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="option-two" id="option-two" />
+          <RadioGroupItem value="option-two" id="GitHub Tool" />
           <Label htmlFor="option-two">Chat with GitHub</Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <RadioGroupItem value="option-three" id="Web Tool" />
+          <Label htmlFor="option-three">Web Browsing</Label>
         </div>
       </RadioGroup>
       {tempTool === "option-two" && (
@@ -55,9 +70,17 @@ const ToolSwitcherRadioGroup = ({ defaultValue }) => {
           className="my-2"
         />
       )}
-      {isChanged && <Button onClick={saveChanges}>Save</Button>}
+      {/* {tempTool === "option-three" && (
+        <Input
+          type="text"
+          placeholder="Ask the web..."
+          value={tempGithubRepo}
+          onChange={handleRepoChange}
+          className="mt-2"
+        />
+      )} */}
+      {isChanged && <Button className="mt-2" onClick={saveChanges}>Save</Button>}
     </>
   );
 };
 
-export default ToolSwitcherRadioGroup;

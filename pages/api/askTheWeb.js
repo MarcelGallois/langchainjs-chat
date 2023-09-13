@@ -8,34 +8,23 @@ import { ConversationalRetrievalQAChain } from "langchain/chains";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { BufferMemory } from "langchain/memory";
 import { GithubRepoLoader } from "langchain/document_loaders/web/github";
+import { SerpAPILoader } from "langchain/document_loaders/web/serpapi";
+import { MongoClient, ObjectId } from "mongodb";
+import { ConversationChain } from "langchain/chains";
+import { MongoDBChatMessageHistory } from "langchain/stores/message/mongodb";
 
 export default async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).end();
   }
+  let sessionId;
 
-  const { repo } = req.body;
 
-  if (!repo) {
-    return res.status(400).json({ error: "Missing GitHub repository" });
-  }
-
-  console.log(repo)
-
+  const query = req.body.question;
+  const apiKey = process.env.SERPAPI_API_KEY;
   // Initialize logic
-  const loader = new GithubRepoLoader(
-    repo,
-    {
-      branch: "main",
-      recursive: false,
-      processSubmodules: true,
-      unknown: "warn",
-      maxConcurrency: 5, // Defaults to 2
-      accessToken: process.env.GITHUB_ACCESS_TOKEN
-    }
-  );
+  const loader = new SerpAPILoader({ q: query, apiKey });
   const data = await loader.load();
-  // console.log(data)
 
   const textSplitter = new RecursiveCharacterTextSplitter({
     chunkSize: 500,
@@ -43,14 +32,24 @@ export default async (req, res) => {
   });
   const splitDocs = await textSplitter.splitDocuments(data);
 
-
   const embeddings = new OpenAIEmbeddings();
   const vectorStore = await MemoryVectorStore.fromDocuments(splitDocs, embeddings);
-  console.log(splitDocs)
 
+  const client = new MongoClient(process.env.MONGODB_URI || "");
+  await client.connect();
+  const collection = client.db("langchain").collection("memory");
+
+  // generate a new sessionId string
+  if (!req.body.sessionId) {
+    sessionId = new ObjectId().toString();
+  } else {
+    sessionId = req.body.sessionId;
+  }
   const memory = new BufferMemory({
-    memoryKey: "chat_history",
-    returnMessages: true,
+    chatHistory: new MongoDBChatMessageHistory({
+      collection,
+      sessionId,
+    }),
   });
 
   const model = new ChatOpenAI({ modelName: "gpt-3.5-turbo-16k" });
@@ -59,8 +58,15 @@ export default async (req, res) => {
   });
 
   // Call the chain
-  const result = await chain.call({ question: req.body.question });
+  const resultRaw = await chain.call({ question: req.body.question });
 
-  // Respond with result
-  res.status(200).json({ result });
+  if ('response' in resultRaw) {
+    resultRaw.text = resultRaw.response;
+    delete resultRaw.response;
+  } else if ('result' in resultRaw) {
+    resultRaw.text = resultRaw.result;
+    delete resultRaw.result;
+  }
+
+  res.status(200).json({ result: { text: resultRaw.text }, sessionId: sessionId });
 };
