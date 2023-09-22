@@ -1,22 +1,26 @@
 # ChatGPT NextJS Chat App 
 This is an AI Chat application built with Next.js that allows users to chat with an AI assistant powered by OpenAI's GPT-3.5 & GPT-4 APIs. 
+
 ## Features 
 - Chat interface for conversing with the AI assistant
 - Supports all openai conversational ai models (gpt-3.5-turbo - gpt-4)
 - Integration with GitHub to allow the AI to answer questions about code
 - User authentication and profiles
 - Persistent chat history stored in a database
-- Customizable themes and user settings ## Getting Started Prerequisites
+- Customizable themes and user settings
+
+## Getting Started Prerequisites
 - Node.js 14+
 - An OpenAI API key
 ## Installation 
-1. Clone the repository\n
+1. Clone the repository
+   
    ```bash git clone https://github.com/MarcelGallois/langchainjs-chat.git ```
-2. Install dependencies
+3. Install dependencies
    ```bash npm install ```
-3. Configure environment variables Create a `.env.local` file and add your OpenAI API key, Github Access Token and SerpAPI key.
+4. Configure environment variables Create a `.env.local` file and add your OpenAI API key, Github Access Token and SerpAPI key.
    ``` OPENAI_API_KEY="sk-..."\nGITHUB_ACCESS_TOKEN="github_pat..."\nSERPAPI_API_KEY="..."```
-4. Run the app. The app will be available at `http://localhost:3000`.
+5. Run the app. The app will be available at `http://localhost:3000`.
    ```bash npm run dev ```
 ## Architecture 
 - Next.js
