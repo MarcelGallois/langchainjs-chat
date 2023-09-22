@@ -47,6 +47,8 @@ This application uses server sent events for streaming tokens as they are receiv
 
 ## TODO: 
 - Fix GitHub API and personalities.
+- Fix Prism Highlighting
+- Fix Agent with tools streaming output
 - Implement chat history on the side
 - Implement code detection and prismjs for code highlighting ##BROKEN
 - Implement a good default chat agent & give ssome personality/preprompts
