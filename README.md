@@ -18,15 +18,18 @@ This is an AI Chat application built with Next.js that allows users to chat with
 1. Clone the repository
    
    ```bash git clone https://github.com/MarcelGallois/langchainjs-chat.git ```
-3. Install dependencies
+2. Install dependencies
    
    ```bash npm install ```
-5. Configure environment variables Create a `.env.local` file and add your OpenAI API key, Github Access Token and SerpAPI key.
+3. Configure environment variables Create a `.env.local` file and add your OpenAI API key, Github Access Token and SerpAPI key.
    
   ``` OPENAI_API_KEY="sk-..." ```
+  
   ``` GITHUB_ACCESS_TOKEN="github_pat..." ```
+  
   ``` SERPAPI_API_KEY="..." ```
-7. Run the app. The app will be available at `http://localhost:3000`.
+  
+4. Run the app. The app will be available at `http://localhost:3000`.
 
    ```bash npm run dev ```
    
@@ -43,7 +46,7 @@ The backend uses Next.js API routes and Vercel serverless functions to call the 
 ## Contributing Pull requests are welcome! Feel free to open an issue for any bugs or feature requests. 
 
 ## TODO: 
-- Fix GitHub and personalities.
+- Fix GitHub API and personalities.
 - Implement code detection and prismjs for code highlighting ##BROKEN
 - Implement a good default chat agent & give ssome personality/preprompts
 - Implement chat with uploaded document
