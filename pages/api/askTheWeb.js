@@ -1,32 +1,12 @@
-// pages/api/askQuestion.js
-
-import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { ConversationalRetrievalQAChain } from "langchain/chains";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { BufferWindowMemory } from "langchain/memory";
-import { GithubRepoLoader } from "langchain/document_loaders/web/github";
 import { SerpAPI } from "langchain/tools";
 import { MongoClient, ObjectId } from "mongodb";
-import { ConversationChain } from "langchain/chains";
 import { MongoDBChatMessageHistory } from "langchain/stores/message/mongodb";
 import {
   ChatPromptTemplate,
-  PromptTemplate,
-  SystemMessagePromptTemplate,
-  AIMessagePromptTemplate,
-  HumanMessagePromptTemplate,
 } from "langchain/prompts";
-import {
-  AIMessage,
-  HumanMessage,
-  SystemMessage,
-} from "langchain/schema";
-import { ConversationSummaryBufferMemory } from "langchain/memory";
-import { XataChatMessageHistory } from "langchain/stores/message/xata";
-import { BaseClient } from "@xata.io/client";
+
 import { AmeliaPersona } from "@/data/prompts/AmeliaPersona";
 import { ChatGPTReminder } from "@/data/prompts/ChatGPTReminder";
 import { initializeAgentExecutorWithOptions } from "langchain/agents";

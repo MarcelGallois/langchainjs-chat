@@ -1,49 +1,15 @@
-// pages/api/askQuestion.js
-
-import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio";
-import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { MemoryVectorStore } from "langchain/vectorstores/memory";
-import { ConversationalRetrievalQAChain } from "langchain/chains";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { BufferWindowMemory } from "langchain/memory";
-import { GithubRepoLoader } from "langchain/document_loaders/web/github";
 import { MongoClient, ObjectId } from "mongodb";
 import { ConversationChain } from "langchain/chains";
 import { MongoDBChatMessageHistory } from "langchain/stores/message/mongodb";
 import {
   ChatPromptTemplate,
-  PromptTemplate,
-  SystemMessagePromptTemplate,
-  AIMessagePromptTemplate,
-  HumanMessagePromptTemplate,
 } from "langchain/prompts";
-import {
-  AIMessage,
-  HumanMessage,
-  SystemMessage,
-} from "langchain/schema";
-import { ConversationSummaryBufferMemory } from "langchain/memory";
-import { XataChatMessageHistory } from "langchain/stores/message/xata";
 import { BaseClient } from "@xata.io/client";
 import { DANPersona } from "@/data/prompts/DANPersona";
 import { ChatGPTReminder } from "@/data/prompts/ChatGPTReminder";
 
-const getXataClient = () => {
-  if (!process.env.XATA_API_KEY) {
-    throw new Error("XATA_API_KEY not set");
-  }
-
-  if (!process.env.XATA_DB_URL) {
-    throw new Error("XATA_DB_URL not set");
-  }
-  const xata = new BaseClient({
-    databaseURL: process.env.XATA_DB_URL,
-    apiKey: process.env.XATA_API_KEY,
-    branch: process.env.XATA_BRANCH || "main",
-  });
-  return xata;
-};
 
 const systemTemplateFirst = DANPersona;
 const systemTemplateMain = ChatGPTReminder;
