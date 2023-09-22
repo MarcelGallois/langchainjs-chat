@@ -69,8 +69,8 @@ This application uses server sent events for streaming tokens as they are receiv
 - Add the ability to share chats
 - Add a prompt for the web one that asks if there are any good times to go fishing in the next week
 
-#Future bot personalities:
-
+# Future bot personalities:
+(subject to change)
 - Amelia, Bonny&Clyde (two bots and one user chat with eachother), (CatGPT), Dalek, Eve, Francesco, George, Hal, Inigo, Jarvis, K-9, Lizard Man, Marvin, Nell, Oliver, Polly, Quaid, R2-D2, Samantha, TARS, Ulysses, Viki, Wall-E, Xander, Yoda, Zola
 
 - Change the way APIs are set up so they're more modular (DRY)
