@@ -3,6 +3,7 @@ This is an AI Chat application built with Next.js that allows users to chat with
 
 https://github.com/MarcelGallois/langchainjs-chat/assets/111620578/15fcff5c-0f52-46fa-9034-8a60636cfcdb
 
+# **THIS IS A WORK IN PROGRESS**
 ## Features 
 - Chat interface for conversing with the AI assistant
 - Token streamed responses from the assistant
