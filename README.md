@@ -1,14 +1,14 @@
 # GPT Powered NextJS Chat App 
-This is an AI Chat application built with Next.js that allows users to chat with an AI assistant powered by OpenAI's GPT-3.5 & GPT-4 APIs (I will be adding the support for open source LLMs soon!). 
+This is an AI Chat application built with Next.js that allows users to chat with an AI assistant powered by OpenAI's GPT-3.5 & GPT-4 APIs (I will be adding the support for open source LLMs soon!)
 
 ## Features 
 - Chat interface for conversing with the AI assistant
+- Token streamed responses from the assistant
 - Supports all openai conversational ai models (gpt-3.5-turbo - gpt-4)
-- Integration with GitHub to allow the AI to answer questions about code
-- User authentication and profiles
-- Persistent chat history stored in a database
+- Integration with GitHub to allow the AI to answer questions about code ##BROKEN ATM
+- Persistent chat history stored in a database (need to build in a way to access previous chats)
 - Customizable themes and user settings
-- The app comes with a default system theme and a configurable light and dark theme.
+- The app comes with a default system theme and a configurable light and dark theme
 
 ## Getting Started Prerequisites
 - Node.js 14+
@@ -35,18 +35,19 @@ This is an AI Chat application built with Next.js that allows users to chat with
    
 ## Architecture 
 - Next.js
+- OpenAI API
 - Shadcn
 - Tailwind CSS
 - Prism
-- OpenAI API
 - microsoft/fetch-event-source
-  
-The backend uses Next.js API routes and Vercel serverless functions to call the OpenAI API. 
+
+This application uses server sent events for streaming tokens as they are received.The backend uses Next.js API routes and Vercel serverless functions to call the OpenAI API. 
 
 ## Contributing Pull requests are welcome! Feel free to open an issue for any bugs or feature requests. 
 
 ## TODO: 
 - Fix GitHub API and personalities.
+- Implement chat history on the side
 - Implement code detection and prismjs for code highlighting ##BROKEN
 - Implement a good default chat agent & give ssome personality/preprompts
 - Implement chat with uploaded document
