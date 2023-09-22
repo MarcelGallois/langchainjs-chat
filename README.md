@@ -1,7 +1,8 @@
 # GPT Powered NextJS Chat App 
 This is an AI Chat application built with Next.js that allows users to chat with an AI assistant powered by OpenAI's GPT-3.5 & GPT-4 APIs (I will be adding the support for open source LLMs soon!)
 
-https://github.com/MarcelGallois/langchainjs-chat/assets/111620578/15fcff5c-0f52-46fa-9034-8a60636cfcdb
+https://github.com/MarcelGallois/langchainjs-chat/assets/111620578/9a3bafda-1bd6-4303-bcdc-b292ee161a66
+
 
 # **THIS IS A WORK IN PROGRESS**
 ## Features 
