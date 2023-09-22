@@ -23,9 +23,9 @@ export default function ToolSwitcherRadioGroup({ defaultValue }) {
 
   const saveChanges = () => {
     const modelNames = {
-      "option-one": "GPT-3.5-turbo",
-      "option-two": "GPT-3.5-turbo-16k",
-      "option-three": "GPT-4"
+      "option-one": "gpt-3.5-turbo",
+      "option-two": "gpt-3.5-turbo-16k",
+      "option-three": "gpt-4"
     };
     updateToolState("selectedModel", tempModel);
     updateToolState("selectedModelName", modelNames[tempModel]);

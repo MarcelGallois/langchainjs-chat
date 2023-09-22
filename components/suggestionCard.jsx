@@ -8,22 +8,32 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import axios from 'axios';  // or use any other method to make API calls
+import { motion, AnimatePresence } from 'framer-motion';
 
+
+const item = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0 },
+};
 
 // DynamicSuggestionCards component
-const DynamicSuggestionCards = ({ handleQuestion }) => {
+const DynamicSuggestionCards = ({ handleQuestion, setUserInput }) => {
   const cardInfo = [
     {
-      title: "What is in this GitHub repo?",
-      description: 'Learn about this GitHub repo.',
+      title: "Who are you?",
+      description: 'Learn about this ChatBot.',
       hideOnSmall: true  // This will hide the first card on small screens
     },
     {
-      title: 'Tell me how to use langchainjs.',
-      description: 'Learn how to use langchainjs.',
+      title: 'Tell me something awesome.',
+      description: "Explore the bot's capabilities.",
       hideOnSmall: false  // This will show the second card on small screens
     }
+    // {
+    //   title: 'Tell me some uplifting news.',
+    //   description: 'Search the web to give me some good news.',
+    //   hideOnSmall: false  // This will show the second card on small screens
+    // }
   ];
 
   const cardClickHandler = (card) => {
@@ -33,14 +43,26 @@ const DynamicSuggestionCards = ({ handleQuestion }) => {
   return (
     <div className="flex h-[100%] items-end overflow-hidden">
       <div className="flex w-[100%] h-[150px] justify-evenly">
-        {cardInfo.map((card, index) => (
-          <Card key={index} className={`${card.hideOnSmall ? 'hidden md:flex' : ''} w-[300px] hover:shadow-lg transition duration-200 h-15 ease-in-out transform hover:-translate-y-1 hover:scale-105 cursor-pointer`} onClick={() => cardClickHandler(card)}>
-            <CardHeader>
-              <CardTitle className="text-left">{card.title}</CardTitle>
-              <CardDescription className="text-left">{card.description}</CardDescription>
-            </CardHeader>
-          </Card>
-        ))}
+        <AnimatePresence>
+          {cardInfo.map((card, index) => (
+            <motion.div
+              key={index}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              variants={item}
+              custom={index}
+              className={`${card.hideOnSmall ? 'hidden md:flex' : 'flex'} flex-col justify-end`}
+            >
+              <Card className={`w-[300px] hover:shadow-lg transition duration-200 h-15 ease-in-out transform hover:-translate-y-1 hover:scale-105 cursor-pointer`} onClick={() => cardClickHandler(card)}>
+                <CardHeader>
+                  <CardTitle className="text-left">{card.title}</CardTitle>
+                  <CardDescription className="text-left">{card.description}</CardDescription>
+                </CardHeader>
+              </Card>
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
     </div>
   );

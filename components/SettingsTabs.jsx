@@ -48,6 +48,7 @@ export default function SettingsTabs() {
           <CardHeader>
             <CardTitle>Tools</CardTitle>
             <CardDescription>
+              <p className="text-red-500 italic">Chatbot GitHub browsing does not work. Web browsing does. </p>
               Give the chatbot tools here. Only one tool can be active at a time but they can be changed at any time during the conversation.
             </CardDescription>
           </CardHeader>
@@ -62,6 +63,7 @@ export default function SettingsTabs() {
             <CardTitle>Personality</CardTitle>
             <CardDescription>
               <p className="text-red-500 italic">Changing the Chatbot's Personality will reset the chat history. </p>
+              <p className="text-red-500 italic">Chatbot personalities currently do not work due to breaking changes with streaming. </p>
               Change the chatbot's personality. The default personality is Amelia, a kind and helpful assistant. Hover over the other personalities to see what they're like.
             </CardDescription>
           </CardHeader>

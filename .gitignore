@@ -35,3 +35,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# files related to proposal manager
+/pages/api/proposalManager
+/components/JobFlowManager.jsx
+/components/Sheet.jsx
+/data/developer.txt
+/app/proposal-manager
