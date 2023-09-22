@@ -8,6 +8,7 @@ This is an AI Chat application built with Next.js that allows users to chat with
 - User authentication and profiles
 - Persistent chat history stored in a database
 - Customizable themes and user settings
+- The app comes with a default system theme and a configurable light and dark theme.
 
 ## Getting Started Prerequisites
 - Node.js 14+
