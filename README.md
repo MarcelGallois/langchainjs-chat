@@ -31,7 +31,7 @@ This is an AI Chat application built with Next.js that allows users to chat with
   
 4. Run the app. The app will be available at `http://localhost:3000`.
 
-   ```bash npm run dev ```
+   ```npm run dev ```
    
 ## Architecture 
 - Next.js
