@@ -7,6 +7,7 @@ https://github.com/MarcelGallois/langchainjs-chat/assets/111620578/15fcff5c-0f52
 - Chat interface for conversing with the AI assistant
 - Token streamed responses from the assistant
 - Supports all openai conversational ai models (gpt-3.5-turbo - gpt-4)
+- Stores chat memory in MongoDB ##Issues with tools and saving memory
 - Integration with GitHub to allow the AI to answer questions about code ##BROKEN ATM
 - Persistent chat history stored in a database (need to build in a way to access previous chats)
 - Customizable themes and user settings
@@ -50,6 +51,7 @@ This application uses server sent events for streaming tokens as they are receiv
 ## TODO: 
 - Fix GitHub API and personalities.
 - Fix Prism Highlighting
+- Integrate OpenAPI spec library so the user can chat with any API endpoint.
 - Fix Agent with tools streaming output/memory issues
 - Implement chat history on the side
 - Implement code detection and prismjs for code highlighting ##BROKEN
