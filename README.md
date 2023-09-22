@@ -10,7 +10,7 @@ This is an AI Chat application built with Next.js that allows users to chat with
 - Node.js 14+
 - An OpenAI API key
 ## Installation 
-1. Clone the repository
+1. Clone the repository\n
    ```bash git clone https://github.com/MarcelGallois/langchainjs-chat.git ```
 2. Install dependencies
    ```bash npm install ```
