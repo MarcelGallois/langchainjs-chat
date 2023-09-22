@@ -67,7 +67,9 @@ This application uses server sent events for streaming tokens as they are receiv
 - YT content checker should be able to check for age appropriate content, but also for content that is relevant to the user's interests. Enter in a youtube link, the bot will respond with an age rating and the user can then start a conversation about the video.
 - Add the ability to share chats
 - Add a prompt for the web one that asks if there are any good times to go fishing in the next week
-- Make these bot personalities:
-- Amelia, Bonny&Clyde (two bots and one user chat with eachother), CatGPT, Dalek, Eve, Francesco, George, Hal, Inigo, Jarvis, K-9, Lizard Man, Marvin, Nell, Oliver, Polly, Quaid, R2-D2, Samantha, TARS, Ulysses, Viki, Wall-E, Xander, Yoda, Zola
+
+#Future bot personalities:
+
+- Amelia, Bonny&Clyde (two bots and one user chat with eachother), (CatGPT), Dalek, Eve, Francesco, George, Hal, Inigo, Jarvis, K-9, Lizard Man, Marvin, Nell, Oliver, Polly, Quaid, R2-D2, Samantha, TARS, Ulysses, Viki, Wall-E, Xander, Yoda, Zola
 
 - Change the way APIs are set up so they're more modular (DRY)
