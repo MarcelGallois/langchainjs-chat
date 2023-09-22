@@ -9,7 +9,7 @@ https://github.com/MarcelGallois/langchainjs-chat/assets/111620578/15fcff5c-0f52
 - Supports all openai conversational ai models (gpt-3.5-turbo - gpt-4)
 - Stores chat memory in MongoDB ##Issues with tools and saving memory
 - Integration with GitHub to allow the AI to answer questions about code ##BROKEN ATM
-- Persistent chat history stored in a database (need to build in a way to access previous chats)
+- Persistent chat history stored in a database (need to build in links to access previous chats)
 - Customizable themes and user settings
 - The app comes with a default system theme and a configurable light and dark theme
 
