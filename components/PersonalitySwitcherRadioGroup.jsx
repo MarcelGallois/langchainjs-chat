@@ -21,14 +21,17 @@ export default function PersonalitySwitcherRadioGroup({ defaultValue }) {
 
   const handlePersonalitySwitch = (value) => {
     setTempPersonality(value);
-    console.log(tempPersonality)
+    const shouldUseSecondChain = (value === 'bonnie-and-clyde');
+    updateToolState("useSecondChain", shouldUseSecondChain); // Update context immediately when radio is changed
     setIsChanged(value !== selectedPersonality);
   };
 
-
-
   const saveChanges = () => {
     updateToolState("selectedPersonality", tempPersonality);
+
+    const shouldUseSecondChain = (tempPersonality === 'bonnie-and-clyde');
+    updateToolState("useSecondChain", shouldUseSecondChain); // Update context when saved
+
     setIsChanged(false);
   };
 
@@ -46,27 +49,27 @@ export default function PersonalitySwitcherRadioGroup({ defaultValue }) {
           <Label htmlFor="amelia-personality">Amelia</Label>
         </div>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="bob" id="bob-personality" />
+          <RadioGroupItem value="bonnie-and-clyde" id="bonnie-and-clyde-personality" />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Label htmlFor="bob-personality">Bob</Label>
+                <Label htmlFor="bonnie-and-clyde-personality">Bonnie and Clyde</Label>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Bob is a master planner.</p>
+                <p>Bonnie and Clyde are a dynamic duo. </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
         <div className="flex items-center space-x-2">
-          <RadioGroupItem value="charlie" id="charlie-personality" />
+          <RadioGroupItem value="DAN" id="DAN-personality" />
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger>
-                <Label htmlFor="charlie-personality">Charlie</Label>
+                <Label htmlFor="DAN-personality">DAN</Label>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Charlie is a skilled software developer.</p>
+                <p>DAN will do anything now.</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

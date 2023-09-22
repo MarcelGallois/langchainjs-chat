@@ -13,11 +13,11 @@ DO NOT PUSH UNTIL THIS IS EDITED AND THESE ARE DONE
 - Implement the ability to switch different LLMS besides just chatgpt-3.5-turbo and gpt-4
 - Give people the option to copy code with a button and toggle no wrap/wrap in the code sections
 - Give people the option to save their chat history
-- Make settings a tab menu
-- Store previous conversations to a database so users can switch between relevant tools/agents
+- Make settings a tab menu ##DONE
+- Store previous conversations to a database so users can switch between relevant tools/agents ##DONE
 - Fix state of readme
 - Fix scrolling when a new message comes in
-- Clear github field on tool save
+- Clear github field on tool save ##DONE
 - Get Github RepoLoader to actually work
 - Introduce a github repo vectorStore storage/indexing in a db
 - Add a YouTube "age appropriate" content checker
@@ -26,8 +26,25 @@ DO NOT PUSH UNTIL THIS IS EDITED AND THESE ARE DONE
 - YT content checker should be able to check for age appropriate content, but also for content that is relevant to the user's interests. Enter in a youtube link, the bot will respond with an age appropriate rating and the user can then start a conversation about the video.
 - Stock sentiment tracker, use RSS feeds to get the latest news about stocks and then give a rating on the stock. 
 - Build in a vector database for the chat bots.
+- Build in a programming language converter
+- Make catGPT in the app
+- Make a CAMEL conversation in the app that a user can guide with prompts
+- Change personalities and give them the ability to use different tools
+- Add the ability to share chats
+- Add a prompt for the web one that asks if there are any good times to go fishing in the next week
+
 
 - Look at writer.com as an example for portfolio design
 
 
 - Make a browser extension so wwhen you right click on highlighted code, you can select what programming language to convert it to, it calls chatgpt and displays the code somehow. could also extend to actual language.
+
+- Detect when the context limit has been reached
+- Summarize the chat in the mongodb
+- Remove the chat in the mongodb
+- Enter the summary in the mongodb
+
+- Make these bot personalities:
+- Amelia, Bonny&Clyde (two bots and one user chat with eachother), CatGPT, Dalek, Eve, Francesco, George, Hal, Inigo, Jarvis, K-9, Lizard Man, Marvin, Nell, Oliver, Polly, Quaid, R2-D2, Samantha, TARS, Ulysses, Viki, Wall-E, Xander, Yoda, Zola
+
+- Change the way APIs are set up so they're more modular (DRY)

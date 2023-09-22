@@ -21,7 +21,8 @@ export const ToolSwitcherProvider = ({ children }) => {
     selectedPersonality: null,
     selectedPersonalityName: null,
     selectedTemperature: null,
-    githubRepo: ''
+    githubRepo: '',
+    useSecondChain: false,
   });
 
   const updateToolState = (key, value) => {

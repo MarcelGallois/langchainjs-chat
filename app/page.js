@@ -1,3 +1,5 @@
+// Front end
+
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -11,59 +13,42 @@ import Prism from 'prismjs';
 import { ModeToggle } from "@/components/modeToggle";
 import { ToolBadge } from "@/components/Badge";
 import axios from 'axios';
+import { fetchEventSource } from '@microsoft/fetch-event-source';
+import { motion } from 'framer-motion';
+
+import { useInitializeState } from '@/utils/customHooks/useInitializeState';
+import { usePrismHighlight } from '@/utils/customHooks/usePrismHighlight';
+import { useScrollToBottom } from '@/utils/customHooks/useScrollToBottom';
 
 // Consider using Shadcn ScrollArea for the chatbox
 // Consider using Shadcn Slider for the temperature of the model
 // Consider using Shadcn Toast to show that settings have been changed
 // Use shadcn Tabs for the settings menu
 // Use shadcn Badge to display what the current model is, what its personality is, and what tool(s) it has.
+// If is sending, then replace send button with a loading spinner. 
+// Prevent sending until 0.5 second after initial render.
+
 
 export default function Home() {
   const [userInput, setUserInput] = useState("");
   const [chatHistory, setChatHistory] = useState([]);
   const [isSending, setIsSending] = useState(false)
   const [sessionId, setSessionId] = useState(null);
-  // const [model, setModel] = useState(null); // Probably need to incorporate this into the context provider to make it accessable after changing in the settings menu
-  // const [personality, setPersonality] = useState(null) // Probably need to incorporate this into the context provider to make it accessable after changing in the settings menu
+  // const [isConnectionActive, setConnectionActive] = useState(false);
 
   const chatBoxRef = useRef(null);
-  const { selectedTool, selectedToolName, selectedModel, selectedModelName, selectedTemperature, selectedPersonality, githubRepo, updateToolState } = useToolSwitcher();
+  const { selectedTool, selectedToolName, selectedModel, selectedModelName, selectedTemperature, selectedPersonality, githubRepo, updateToolState, useSecondChain } = useToolSwitcher();
   const textAreaRef = useRef(null);
 
 
-
-
-  useEffect(() => {
-    const highlight = () => {
-      Prism.highlightAll();
-    };
-    highlight();
-  }, [chatHistory]);
+  useInitializeState(updateToolState, selectedModel, selectedTool, selectedTemperature, selectedPersonality);
+  usePrismHighlight(chatHistory);
+  useScrollToBottom(chatBoxRef, chatHistory);
 
   useEffect(() => {
-    const toolNames = {
-      "option-one": "Default - No Tools",
-      "option-two": "GitHub Tool",
-      "option-three": "Web Tool",
-    };
-    const modelNames = {
-      "option-one": "GPT-3.5-turbo",
-      "option-two": "GPT-3.5-turbo-16k",
-      "option-three": "GPT-4"
-    };
-    const initialModel = selectedModel || "option-one";
-    const initialModelName = modelNames[initialModel] || "GPT-3.5-turbo";
-    updateToolState("selectedModel", initialModel);
-    updateToolState("selectedModelName", initialModelName);
-    const initialTemperature = selectedTemperature || [50];
-    updateToolState("selectedTemperature", initialTemperature);
-    const initialTool = selectedTool || "option-one";
-    const initialToolName = toolNames[initialTool] || "Default";
-    updateToolState("selectedTool", initialTool);
-    updateToolState("selectedToolName", initialToolName);
-    const initialPersonality = selectedPersonality || "amelia";
-    updateToolState("selectedPersonality", initialPersonality);
-  }, []);
+    setChatHistory([]);
+    setSessionId(null);
+  }, [selectedPersonality])
 
   useEffect(() => {
     textAreaRef.current?.focus();
@@ -82,14 +67,6 @@ export default function Home() {
 
 
   useEffect(() => {
-    const chatBox = chatBoxRef.current;
-    if (chatBox) {
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-  }, [chatHistory]);
-
-
-  useEffect(() => {
     // The following code is not necessary for styling but it removes all unnecessary indentations so we'll keep it here for now
     const codeBlocks = document.querySelectorAll('.code-block');
     codeBlocks.forEach((block) => {
@@ -105,12 +82,11 @@ export default function Home() {
   }, [selectedTool, githubRepo]);
 
 
-
-
+  let ctrl;
   const handleQuestion = async (input = userInput) => {
     if (isSending) return;
-    const question = userInput.trim();
-
+    console.log(input);
+    const question = userInput.trim() || input.trim();
     if (question === "") return;
 
     setIsSending(true);
@@ -118,30 +94,79 @@ export default function Home() {
     const newEntry = { user: input, bot: "...", messageID: Date.now().toString() };
     setChatHistory((prevChatHistory) => [...prevChatHistory, newEntry]);
 
-    let apiEndpoint;
+    // Define a mapping between personalities and their API prefixes
+    const personalityPrefixes = {
+      "amelia": "",
+      "DAN": "DAN",
+      "bonnie-and-clyde": "bonnie-and-clyde",
+    };
+
+    let baseEndpoint;
     if (selectedTool === "option-two") {
-      apiEndpoint = "/api/askGithub";
+      baseEndpoint = "askGithub";
     } else if (selectedTool === "option-three") {
-      apiEndpoint = "/api/askTheWeb";
+      baseEndpoint = "askTheWeb";
     } else {
-      apiEndpoint = "/api/askQuestion";
+      baseEndpoint = "askQuestion";
     }
 
-    const payload = { question: input, sessionId: sessionId };
+    // Look up the API prefix based on the selected personality
+    const prefix = personalityPrefixes[selectedPersonality] || "";
+    const apiEndpoint = `/api/${prefix ? `${prefix}/` : ""}${baseEndpoint}`;
+
+    const payload = {
+      question: input,
+      sessionId: sessionId,
+      modelName: selectedModelName,
+      temperature: selectedTemperature,
+      personality: selectedPersonality,
+      useSecondChain: useSecondChain,
+    };
 
     if (selectedTool === "option-two" && githubRepo) {
       payload.repo = githubRepo;
     }
 
     try {
-      const { data } = await axios.post(apiEndpoint, payload);
-      setChatHistory((prevChatHistory) => {
-        const updatedChatHistory = [...prevChatHistory];
-        updatedChatHistory[updatedChatHistory.length - 1].bot = data.result.text;
-        return updatedChatHistory;
-      });
-      if (!sessionId) {
-        setSessionId(data.sessionId)
+      let firstTokenReceived = false;
+      ctrl = new AbortController();
+      if (typeof window !== 'undefined') {
+        fetchEventSource(apiEndpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+          signal: ctrl.signal,
+          onmessage: (event) => {
+            const data = JSON.parse(event.data);
+            if (data.done) {
+              setSessionId(data.sessionId);
+              // console.log("Session ID:", sessionId);
+              // console.log("done");
+              setIsSending(false);
+              ctrl.abort();
+              return;
+            } else {
+              console.log(data);
+              // setConnectionActive(true);
+              setChatHistory((prevChatHistory) => {
+                const updatedChatHistory = [...prevChatHistory];
+                const lastMessageIndex = updatedChatHistory.length - 1;
+                const lastBotMessage = updatedChatHistory[lastMessageIndex].bot;
+
+                // Combine both conditions in a single update
+                updatedChatHistory[lastMessageIndex].bot = !firstTokenReceived ? lastBotMessage.replace("...", "") + data.token : lastBotMessage + data.token;
+
+                // Update the flag only after setting the message
+                firstTokenReceived = true;
+
+                return updatedChatHistory;
+              });
+            }
+          },
+          openWhenHidden: true,
+        })
       }
     } catch (error) {
       setChatHistory((prevChatHistory) => {
@@ -150,12 +175,9 @@ export default function Home() {
         return updatedChatHistory;
       });
     } finally {
-
       setIsSending(false);
     }
   };
-
-
   return (
     // Color user's and bot's bubble  background based on the theme
     <>
@@ -184,7 +206,7 @@ export default function Home() {
                     </span>
                     <div className="font-bold text-left flex w-max max-w-[100%] flex-col gap-2 px-3 py-2 text-sm bg-muted rounded-xl">
                       <span className="font-normal">
-                        {parseTextForCode(entry.bot)}
+                        {entry.bot}
                       </span>
                     </div>
                   </div>
@@ -194,9 +216,18 @@ export default function Home() {
 
               {/* Animate the cards coming in */}
               {chatHistory.length === 0 && (
-                <DynamicSuggestionCards
-                  handleQuestion={handleQuestion}
-                />
+                <div className="flex h-[100%] w-[100%] justify-center  items-end overflow-hidden">
+                  <motion.div className='w-[100%]'>
+                    {chatHistory.length === 0 && (
+                      <div>
+                        <DynamicSuggestionCards
+                          handleQuestion={handleQuestion}
+                        />
+                      </div>
+                    )}
+                  </motion.div>
+                </div>
+
               )}
 
             </div>
