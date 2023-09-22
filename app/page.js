@@ -1,5 +1,3 @@
-// Front end
-
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
@@ -34,7 +32,6 @@ export default function Home() {
   const [chatHistory, setChatHistory] = useState([]);
   const [isSending, setIsSending] = useState(false)
   const [sessionId, setSessionId] = useState(null);
-  // const [isConnectionActive, setConnectionActive] = useState(false);
 
   const chatBoxRef = useRef(null);
   const { selectedTool, selectedToolName, selectedModel, selectedModelName, selectedTemperature, selectedPersonality, githubRepo, updateToolState, useSecondChain } = useToolSwitcher();
@@ -54,7 +51,7 @@ export default function Home() {
     textAreaRef.current?.focus();
   }, []);
 
-  // Press enter to submit question
+  // Press enter to submit question, shift + enter to add a new line
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
       if (event.key === 'Enter' && event.shiftKey) {
