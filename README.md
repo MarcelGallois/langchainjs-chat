@@ -16,7 +16,7 @@ https://github.com/MarcelGallois/langchainjs-chat/assets/111620578/9a3bafda-1bd6
 - The app comes with a default system theme and a configurable light and dark theme
 
 ## Getting Started Prerequisites
-- Node.js 14+
+- Node.js 16.14.0+
 - An OpenAI API key
 
 ## Installation 
